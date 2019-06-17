@@ -1,0 +1,13 @@
+Begin Object Class=Texture2D Name="AIUE_V01_001_Chair_Lod2_Alpha"
+   Begin Object Class=AssetImportData Name="AssetImportData"
+   End Object
+   Begin Object Name="AssetImportData"
+   End Object
+   ImportedSize=(X=512,Y=512)
+   Source=(Id=F8E604624DCB3BBF23857D9FD036826F,SizeX=512,SizeY=512,NumSlices=1,NumMips=1,bPNGCompressed=True,Format=TSF_G8)
+   LightingGuid=33BE9E144ADF40892255FAB2C782087A
+   SourceFilePath="Z:/!!!Projekty/UE4_Scenes/AI29_02/Scene_02/export/AIUE_V01_Chair_Lod2_Alpha.png"
+   AssetImportData=AssetImportData'AssetImportData'
+   MipGenSettings=TMGS_SimpleAverage
+   bUseLegacyGamma=True
+End Object

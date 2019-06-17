@@ -1,0 +1,12 @@
+Begin Object Class=Texture2D Name="AIUE_V01_001_pillow_002_diffuse"
+   Begin Object Class=AssetImportData Name="AssetImportData"
+   End Object
+   Begin Object Name="AssetImportData"
+   End Object
+   ImportedSize=(X=2048,Y=2048)
+   Source=(Id=1E9415AD46FA45D2354060A621DA4844,SizeX=2048,SizeY=2048,NumSlices=1,NumMips=1,bPNGCompressed=True,Format=TSF_G8)
+   LightingGuid=7290F962403D509871FC479837AAFAE9
+   SourceFilePath="Z:/Ai_UE4_vol1/final/poprawki_marketplace/sceny/tex/AIUE_V01_001_pillow_002_diffuse.jpg"
+   AssetImportData=AssetImportData'AssetImportData'
+   bUseLegacyGamma=True
+End Object

@@ -1,0 +1,14 @@
+Begin Object Class=Texture2D Name="AIUE_V01_003_chair_fabric2Color"
+   Begin Object Class=AssetImportData Name="AssetImportData"
+   End Object
+   Begin Object Name="AssetImportData"
+   End Object
+   ImportedSize=(X=128,Y=128)
+   Source=(Id=CD309BE4411C7E4DB63278BF317A86C3,SizeX=128,SizeY=128,NumSlices=1,NumMips=1,bPNGCompressed=True,Format=TSF_G8)
+   LightingGuid=77E701C14546A3C6ED4050A21B298A25
+   SourceFilePath="Z:/!!!Projekty/UE4_Scenes/AIUE_V03/Scene_008/export/AIUE_V01_003_chair_01.fbm/AIUE_V01_003_chair_fabric2Color.jpg"
+   AssetImportData=AssetImportData'AssetImportData'
+   MipGenSettings=TMGS_Blur1
+   bUseLegacyGamma=True
+   NeverStream=True
+End Object
