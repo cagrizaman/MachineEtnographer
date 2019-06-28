@@ -66,13 +66,22 @@ public class GenesisImpl : GenesisSimulator.GenesisSimulatorBase
         return new Confirmation { Message = "OK" };
     }
 
-    public override Task<Confirmation> AddPointList(PointList request,ServerCallContext context){
+    public override Task<Confirmation> AddPointList(PointList request, ServerCallContext context)
+    {
         Debug.Log("Points received");
-        Debug.Log("Point Count " +  request.Points.Count);
+        Debug.Log("Point Count " + request.Points.Count);
         myCamReference.updatePointCloud(request);
         return Task.FromResult(new Confirmation { Message = "OK" });
     }
 
+    public override Task<Confirmation> AddDetectionPointList(DetectionPointList request, ServerCallContext context)
+    {
+        Debug.Log("Point Classes received");
+        Debug.Log("Number of points with classes " + request.Dpoints.Count);
+        myCamReference.addClassesToPointCloud(request);
+        return Task.FromResult(new Confirmation { Message = "OK" });
+
+    }
     public override Task<Confirmation> AddPlaneObject(DetectionPlane request, ServerCallContext context)
     {
 

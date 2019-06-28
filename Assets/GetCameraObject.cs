@@ -37,7 +37,7 @@ public class GetCameraObject : MonoBehaviour
     public static Point[] particles;
     string FILE_PATH;
     private readonly object myLock = new object();
-    private Dictionary<int,DetectionPoint> semanticCloud;
+    private Dictionary<int, DetectionPoint> semanticCloud;
     private Dictionary<int, GameObject> objectCache;
     private DetectionPlane myPlane;
     private DetectionPoint myPoint;
@@ -52,7 +52,7 @@ public class GetCameraObject : MonoBehaviour
         recoveredPointMap = new Dictionary<int, Vector3>();
         newPoints = new List<Point>();
         objectCache = new Dictionary<int, GameObject>();
-        semanticCloud= new Dictionary<int,DetectionPoint>();
+        semanticCloud = new Dictionary<int, DetectionPoint>();
     }
 
     // Update is called once per frame
@@ -63,9 +63,12 @@ public class GetCameraObject : MonoBehaviour
             cam.transform.position = new Vector3(camUpdate.X, camUpdate.Y, camUpdate.Z);
             cam.transform.rotation = new Quaternion(camUpdate.W, camUpdate.R, camUpdate.T, camUpdate.Q);
 
-            particles = new Point[pointMap.Count];
-            pointMap.Values.CopyTo(particles, 0);
-            GetComponent<PointCloud>().SetPointsWithColors(particles, semanticCloud);
+            if (isIncomingPoints)
+            {
+                particles = new Point[pointMap.Count];
+                pointMap.Values.CopyTo(particles, 0);
+                GetComponent<PointCloud>().SetPointsWithColors(particles, semanticCloud);
+            }
             isIncomingPoints = false;
 
         }
@@ -157,8 +160,8 @@ public class GetCameraObject : MonoBehaviour
 
     public void addPoint(DetectionPoint point)
     {
-        
-        semanticCloud[(int)point.HitId]= point;
+
+        semanticCloud[(int)point.HitId] = point;
 
     }
     public void AddSinglePoint(Point p)
@@ -180,13 +183,28 @@ public class GetCameraObject : MonoBehaviour
 
     }
 
-        public void updatePointCloud(PointList newPoints)
+    public void updatePointCloud(PointList newPoints)
     {
         Debug.Log("Receiving something");
 
         foreach (Point p in newPoints.Points)
         {
             pointMap[p.Id] = p;
+        }
+        isIncomingPoints = true;
+
+
+    }
+
+    public void addClassesToPointCloud(DetectionPointList newPoints)
+    {
+        Debug.Log("Receiving something");
+
+
+        foreach (DetectionPoint p in newPoints.Dpoints)
+        {
+            semanticCloud[(int)p.HitId] = p;
+
         }
         isIncomingPoints = true;
 
