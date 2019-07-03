@@ -14,7 +14,7 @@ public class GrpcServer : MonoBehaviour
 
     private bool connected=false;
 
-    public GetCameraObject camReference;
+    public VisionInterface camReference;
     // Start is called before the first frame update
     void Start()
     {

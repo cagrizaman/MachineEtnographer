@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System.Text;
-
-public class GetCameraObject : MonoBehaviour
+using System.Linq;
+public class VisionInterface : MonoBehaviour
 {
     // Start is called before the first frame update
 
@@ -21,8 +21,7 @@ public class GetCameraObject : MonoBehaviour
     private bool incomingPlane = false;
     private bool incomingPointObject = false;
 
-    Dictionary<int, Point> pointMap;
-    List<Point> newPoints;
+    // List<Point> newPoints;
 
     Dictionary<int, Vector3> recoveredPointMap;
 
@@ -37,11 +36,23 @@ public class GetCameraObject : MonoBehaviour
     public static Point[] particles;
     string FILE_PATH;
     private readonly object myLock = new object();
+
+    Dictionary<int, Point> pointMap;
+
+    Dictionary<int, Point> pointCache;
+    Dictionary<int, DetectionPoint> semanticCache;
+
     private Dictionary<int, DetectionPoint> semanticCloud;
     private Dictionary<int, GameObject> objectCache;
     private DetectionPlane myPlane;
     private DetectionPoint myPoint;
 
+    private string[] exclusion_list = new string[] { "office building", "building", "house" };
+    public delegate void OnDataAvailableCallbackFunc(Dictionary<int, Point> pCloud, Dictionary<int, DetectionPoint> sCloud);
+    /// <summary>
+    /// Callback function handle for receiving the available data.
+    /// </summary>
+    public event OnDataAvailableCallbackFunc OnDataAvailableCallback = null;
 
     void Start()
     {
@@ -50,9 +61,12 @@ public class GetCameraObject : MonoBehaviour
         camReply = new CameraReply { X = 0f, Y = 0f, Z = 0f, Q = 0f, W = 0f, R = 0f, T = 0f };
         pointMap = new Dictionary<int, Point>();
         recoveredPointMap = new Dictionary<int, Vector3>();
-        newPoints = new List<Point>();
         objectCache = new Dictionary<int, GameObject>();
         semanticCloud = new Dictionary<int, DetectionPoint>();
+
+        pointCache = new Dictionary<int, Point>();
+        semanticCache = new Dictionary<int, DetectionPoint>();
+
     }
 
     // Update is called once per frame
@@ -63,11 +77,13 @@ public class GetCameraObject : MonoBehaviour
             cam.transform.position = new Vector3(camUpdate.X, camUpdate.Y, camUpdate.Z);
             cam.transform.rotation = new Quaternion(camUpdate.W, camUpdate.R, camUpdate.T, camUpdate.Q);
 
-            if (isIncomingPoints)
+            if (isIncomingPoints && OnDataAvailableCallback != null)
             {
-                particles = new Point[pointMap.Count];
-                pointMap.Values.CopyTo(particles, 0);
-                GetComponent<PointCloud>().SetPointsWithColors(particles, semanticCloud);
+                //OnDataAvailableCallback(pointMap, semanticCloud);
+                OnDataAvailableCallback(pointCache,semanticCache);
+                pointCache.Clear();
+                semanticCache.Clear();
+    
             }
             isIncomingPoints = false;
 
@@ -103,26 +119,6 @@ public class GetCameraObject : MonoBehaviour
         //     incomingPlane = false;
         // }
 
-        // if (incomingPointObject)
-        // {
-
-        //     if (myPoint.HitId > -1 && objectCache.ContainsKey((int)myPoint.HitId))
-        //     {
-        //         Destroy(objectCache[(int)myPoint.HitId]);
-        //         Debug.Log("Updating an already existing detection point");
-        //     }
-        //     GameObject cube = Instantiate(detectionPrefab);
-        //     cube.GetComponent<DetectionObject>().objectClass = myPoint.ObjectClass;
-        //     cube.GetComponent<DetectionObject>().confidence = myPoint.Confidence;
-        //     cube.transform.position = new Vector3(myPoint.Pos.X, myPoint.Pos.Y, myPoint.Pos.Z);
-        //     cube.transform.LookAt(cam.transform);
-        //     cube.transform.localScale = new Vector3(0.03f, 0.03f, 0.03f);
-
-        //     objectCache[(int)myPoint.HitId] = cube;
-
-
-        //     incomingPointObject = false;
-        // }
         name = cam.transform.position.ToString();
     }
 
@@ -189,9 +185,9 @@ public class GetCameraObject : MonoBehaviour
 
         foreach (Point p in newPoints.Points)
         {
-            pointMap[p.Id] = p;
+            pointCache[p.Id] = p;
         }
-        isIncomingPoints = true;
+        //isIncomingPoints = true;
 
 
     }
@@ -203,7 +199,8 @@ public class GetCameraObject : MonoBehaviour
 
         foreach (DetectionPoint p in newPoints.Dpoints)
         {
-            semanticCloud[(int)p.HitId] = p;
+            if (!exclusion_list.Contains(p.ObjectClass))
+                semanticCache[(int)p.HitId] = p;
 
         }
         isIncomingPoints = true;

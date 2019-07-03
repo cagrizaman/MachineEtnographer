@@ -9,13 +9,13 @@ public class GenesisImpl : GenesisSimulator.GenesisSimulatorBase
 {
 
     [SerializeField]
-    readonly GetCameraObject myCamReference;
+    readonly VisionInterface myCamReference;
     readonly object myLock = new object();
 
     private string name;
     private static List<Point> incomingPoints = new List<Point>();
 
-    public GenesisImpl(GetCameraObject camReference)
+    public GenesisImpl(VisionInterface camReference)
     {
         myCamReference = camReference;
     }
