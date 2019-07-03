@@ -71,8 +71,8 @@ public class ClusterPoints : MonoBehaviour
 
         groupsToDetectionObjects();
         //Draw Groups.
-        //GetComponent<PointCloud>().DrawGroups(pointClusters, numPointsInClusters);
-        //GetComponent<PointCloud>().DrawClasses(pointClusters, numPointsInClusters, classesDict);
+        GetComponent<PointCloud>().DrawGroups(pointClusters, numPointsInClusters);
+        GetComponent<PointCloud>().DrawClasses(pointClusters, numPointsInClusters, classesDict);
 
     }
     // Update is called once per frame

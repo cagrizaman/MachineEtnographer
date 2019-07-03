@@ -79,8 +79,8 @@ public class VisionInterface : MonoBehaviour
 
             if (isIncomingPoints && OnDataAvailableCallback != null)
             {
-                //OnDataAvailableCallback(pointMap, semanticCloud);
-                OnDataAvailableCallback(pointCache,semanticCache);
+                OnDataAvailableCallback(pointMap, semanticCloud);
+                //OnDataAvailableCallback(pointCache,semanticCache);
                 pointCache.Clear();
                 semanticCache.Clear();
     
@@ -185,7 +185,7 @@ public class VisionInterface : MonoBehaviour
 
         foreach (Point p in newPoints.Points)
         {
-            pointCache[p.Id] = p;
+            pointMap[p.Id] = p;
         }
         //isIncomingPoints = true;
 
@@ -200,7 +200,7 @@ public class VisionInterface : MonoBehaviour
         foreach (DetectionPoint p in newPoints.Dpoints)
         {
             if (!exclusion_list.Contains(p.ObjectClass))
-                semanticCache[(int)p.HitId] = p;
+                semanticCloud[(int)p.HitId] = p;
 
         }
         isIncomingPoints = true;

@@ -16,10 +16,12 @@ public class DetectionObject : MonoBehaviour
     public Mesh mesh;
     public Matrix4x4 meshTransform;
     private bool initialized = false;
+
+    List<DetectionObject> othersList;
     // Start is called before the first frame update
     void Start()
     {
-
+        othersList = new List<DetectionObject>();
 
     }
 
@@ -32,21 +34,13 @@ public class DetectionObject : MonoBehaviour
         }
         //Maybe merge with others..
         DetectionObject[] others = FindObjectsOfType<DetectionObject>();
-        List<CombineInstance> combineList = new List<CombineInstance>();
+
 
         foreach (DetectionObject other in others)
         {
-            if (bbox.Intersects(other.bbox) && other.objectClass.Equals(objectClass) && !other.Equals(this))
+            if (bbox.Intersects(other.bbox) && other.objectClass.Equals(objectClass) && !other.Equals(this) && !othersList.Contains(other))
             {
-                Debug.Log("Combining Meshes!");
-                CombineInstance[] combine = new CombineInstance[2];
-                combine[0].mesh = mesh;
-                combine[1].mesh = other.mesh;
-                //combine[0].transform=meshTransform;
-                //combine[1].transform=other.meshTransform;
-                //mesh=new Mesh();
-                //mesh.CombineMeshes(combine, true,false);
-                //bbox=mesh.bounds;
+                othersList.Add(other);
                 other.transform.parent = transform;
                 GetComponent<BoxCollider>().center = bbox.center;
                 GetComponent<BoxCollider>().size = bbox.size;
